@@ -131,6 +131,44 @@ class Optimizers:
         return w, losses
 
     @staticmethod
+    def adadelta(model, w0, dataloader=None, epochs=100, gamma=0.9, eps=1e-8):
+        """AdaDelta (FB and MB)"""
+        w = w0.copy()
+        Eg2 = np.zeros_like(w)
+        Edw2 = np.zeros_like(w)
+        losses = []
+
+        for _ in range(epochs):
+            epoch_loss = 0
+            batches = 0
+
+            batch_list = dataloader if dataloader is not None else [None]
+
+            for indices in batch_list:
+                loss = model.compute_loss(w, indices)
+                grad = model.compute_gradient(w, indices)
+
+                epoch_loss += loss
+                batches += 1
+
+                # Moving average of squared gradients
+                Eg2 = gamma * Eg2 + (1 - gamma) * (grad ** 2)
+
+                # Compute update magnitude
+                RMS_dw = np.sqrt(Edw2 + eps)
+                RMS_g = np.sqrt(Eg2 + eps)
+                dw = - (RMS_dw / RMS_g) * grad
+
+                # Moving average of squared updates
+                Edw2 = gamma * Edw2 + (1 - gamma) * (dw ** 2)
+
+                # Update weights
+                w = w + dw
+
+            losses.append(epoch_loss / batches)
+        return w, losses
+
+    @staticmethod
     def adam(model, w0, dataloader=None, epochs=100, lr=0.001, beta1=0.9, beta2=0.999, eps=1e-8):
         """Adam"""
         w = w0.copy()
