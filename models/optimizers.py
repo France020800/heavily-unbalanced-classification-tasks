@@ -77,6 +77,33 @@ class Optimizers:
         return w, losses
 
     @staticmethod
+    def adagrad(model, w0, dataloader=None, epochs=100, lr=0.01, eps=1e-8):
+        """Adagrad"""
+        w = w0.copy()
+        G = np.zeros_like(w)
+        losses = []
+
+        for _ in range(epochs):
+            epoch_loss = 0
+            batches = 0
+
+            batch_list = dataloader if dataloader is not None else [None]
+
+            for indices in batch_list:
+                loss = model.compute_loss(w, indices)
+                grad = model.compute_gradient(w, indices)
+
+                epoch_loss += loss
+                batches += 1
+
+                G += grad ** 2
+
+                w = w - (lr / (np.sqrt(G) + eps)) * grad
+
+            losses.append(epoch_loss / batches)
+        return w, losses
+
+    @staticmethod
     def adam(model, w0, dataloader=None, epochs=100, lr=0.001, beta1=0.9, beta2=0.999, eps=1e-8):
         """Adam"""
         w = w0.copy()
