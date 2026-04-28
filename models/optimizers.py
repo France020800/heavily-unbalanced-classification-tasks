@@ -66,7 +66,6 @@ class Optimizers:
             for indices in dataloader:
                 loss = model.compute_loss(w, indices)
                 grad = model.compute_gradient(w, indices)
-                w_hist.append(w.copy())
 
                 epoch_loss += loss
                 batches += 1
@@ -80,6 +79,7 @@ class Optimizers:
 
                 w = w - alpha * grad
             losses.append(epoch_loss / batches)
+            w_hist.append(w.copy())
         return w, losses, w_hist
 
     @staticmethod
@@ -99,7 +99,6 @@ class Optimizers:
             for indices in batch_list:
                 loss = model.compute_loss(w, indices)
                 grad = model.compute_gradient(w, indices)
-                w_hist.append(w.copy())
 
                 epoch_loss += loss
                 batches += 1
@@ -109,6 +108,7 @@ class Optimizers:
                 w = w - (lr / (np.sqrt(G) + eps)) * grad
 
             losses.append(epoch_loss / batches)
+            w_hist.append(w.copy())
         return w, losses, w_hist
 
     @staticmethod
@@ -128,7 +128,6 @@ class Optimizers:
             for indices in batch_list:
                 loss = model.compute_loss(w, indices)
                 grad = model.compute_gradient(w, indices)
-                w_hist.append(w.copy())
 
                 epoch_loss += loss
                 batches += 1
@@ -138,6 +137,7 @@ class Optimizers:
                 w = w - (lr / (np.sqrt(Eg2) + eps)) * grad
 
             losses.append(epoch_loss / batches)
+            w_hist.append(w.copy())
         return w, losses
 
     @staticmethod
@@ -158,7 +158,6 @@ class Optimizers:
             for indices in batch_list:
                 loss = model.compute_loss(w, indices)
                 grad = model.compute_gradient(w, indices)
-                w_hist.append(w.copy())
 
                 epoch_loss += loss
                 batches += 1
@@ -178,6 +177,7 @@ class Optimizers:
                 w = w + dw
 
             losses.append(epoch_loss / batches)
+            w_hist.append(w.copy())
         return w, losses, w_hist
 
     @staticmethod
@@ -201,7 +201,6 @@ class Optimizers:
                 t += 1
                 loss = model.compute_loss(w, indices)
                 grad = model.compute_gradient(w, indices)
-                w_hist.append(w.copy())
 
                 epoch_loss += loss
                 batches += 1
@@ -215,4 +214,5 @@ class Optimizers:
                 w = w - lr * m_hat / (np.sqrt(v_hat) + eps)
 
             losses.append(epoch_loss / batches)
+            w_hist.append(w.copy())
         return w, losses, w_hist
