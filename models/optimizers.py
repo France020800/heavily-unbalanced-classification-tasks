@@ -3,7 +3,7 @@ from utils.armijo import armijo_line_search
 
 class Optimizers:
     @staticmethod
-    def gradient_descent_armijo(model, w0, epochs=100):
+    def gradient_descent_armijo(model, w0, dataloader=None, epochs=100, **kwargs):
         """Gradient descent with Armijo Line Search """
         w = w0.copy()
         w_hist = []

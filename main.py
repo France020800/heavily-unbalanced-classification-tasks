@@ -1,9 +1,14 @@
+import datetime
+import os
+import sys
+
 import numpy as np
 from matplotlib import pyplot as plt
 
 from models.logistic_regression_model import LogisticRegressionModel
 from models.optimizers import Optimizers
 from utils.dgp import generate_experiment_datasets
+from utils.logger import DualLogger
 from utils.metrics_and_baseline import get_minibatches, compute_class_metrics, run_lbfgs_b
 
 
@@ -34,7 +39,7 @@ def run_single_experiment(model, optimizer_func, w0, is_minibatch=False, epochs=
     }
 
 
-def plot_results(results_dict, lbfgs_opt_loss, title_suffix):
+def plot_results(results_dict, lbfgs_opt_loss, title_suffix, save_path=None):
     """Plots the overall loss, per-class losses, and an overlapping view."""
     fig, axes = plt.subplots(2, 2, figsize=(16, 12))
     fig.suptitle(f"Optimization Performance: {title_suffix}", fontsize=18)
@@ -94,36 +99,102 @@ def plot_results(results_dict, lbfgs_opt_loss, title_suffix):
     ax_c1.grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.show()
+    if save_path:
+        plt.savefig(save_path, dpi=300, bbox_inches='tight', facecolor='white')
+        plt.close(fig)
+    else:
+        plt.show()
 
 
 # --- Example Execution on a Single Dataset ---
 if __name__ == "__main__":
-    # let's pick one of the highly unbalanced ones (N=5000, p=0.01)
+    # 1. Setup Results Directory and Logging
+    results_dir = "results"
+    os.makedirs(results_dir, exist_ok=True)
+
+    log_path = os.path.join(results_dir, "experiment_log.txt")
+    sys.stdout = DualLogger(log_path)
+
+    print("=" * 60)
+    print(f"🚀 Starting Optimization Experiments Pipeline")
+    print(f"Timestamp: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print("=" * 60)
+
+    # 2. Define the optimizer configurations
+    fb_optimizers = {
+        'SGD_Armijo': Optimizers.gradient_descent_armijo,
+        'CG_Armijo': Optimizers.cg_armijo,
+        'Adagrad': Optimizers.adagrad,
+        'RMSProp': Optimizers.rmsprop,
+        'AdaDelta': Optimizers.adadelta,
+        'Adam': Optimizers.adam
+    }
+
+    mb_optimizers = {
+        'SGD_Polyak': Optimizers.sgd_polyak,
+        'Adagrad': Optimizers.adagrad,
+        'RMSProp': Optimizers.rmsprop,
+        'AdaDelta': Optimizers.adadelta,
+        'Adam': Optimizers.adam
+    }
+
+    # 3. Generate Datasets
+    print("\nGenerating datasets...")
     datasets_dict = generate_experiment_datasets()
-    X, y = datasets_dict[(5000, 0.01)]
-    model = LogisticRegressionModel(X, y)
-
-    # Initialize weights to zero
-    w0 = np.zeros(model.n)
-
-    # 1. Get Global Optimum baseline
-    w_opt, lbfgs_loss = run_lbfgs_b(model, w0)
-    print(f"L-BFGS-B Global Minimum Loss: {lbfgs_loss:.6f}")
-
-    # 2. Run experiments
-    results = {}
     epochs = 150
 
-    results['Adam'] = run_single_experiment(model, Optimizers.adam, w0, is_minibatch=True, epochs=epochs, lr=0.01)
-    # results['Adagrad'] = run_single_experiment(model, Optimizers.adagrad, w0, is_minibatch=True, epochs=epochs)
-    # results['SGD Armijo'] = run_single_experiment(model, Optimizers.gradient_descent_armijo, w0, is_minibatch=False, epochs=epochs)
+    # 4. Main Experiment Loop
+    for (N, p), (X, y) in datasets_dict.items():
+        print(f"\n{'=' * 60}")
+        print(f"📊 DATASET: Size (N) = {N} | Minority Class Ratio (p) = {p}")
+        print(f"{'=' * 60}")
 
-    # 3. Print Final Accuracies
-    for method, res in results.items():
-        print(f"\n{method}:")
-        print(f"  Class 0 (Majority) Accuracy: {res['acc_c0'] * 100:.2f}%")
-        print(f"  Class 1 (Minority) Accuracy: {res['acc_c1'] * 100:.2f}%")
+        model = LogisticRegressionModel(X, y)
+        w0 = np.zeros(model.n)
 
-    # 4. Plot [cite: 46]
-    plot_results(results, lbfgs_loss, "Minibatch (N=5000, p=0.01)")
+        # Baseline Calculation
+        w_opt, lbfgs_loss = run_lbfgs_b(model, w0)
+        print(f"🟢 L-BFGS-B Global Minimum Loss: {lbfgs_loss:.6f}\n")
+
+
+        # --- Helper Function for Execution ---
+        def run_suite(suite_dict, is_mb, regime_name):
+            print(f"\n--- Running {regime_name} Regime ---")
+            for opt_name, opt_func in suite_dict.items():
+                print(f"  ▶ Optimizer: {opt_name}")
+
+                try:
+                    # Run the algorithm
+                    res_dict = {}
+                    res_dict[opt_name] = run_single_experiment(
+                        model, opt_func, w0, is_minibatch=is_mb, epochs=epochs
+                    )
+
+                    # Print metrics
+                    res = res_dict[opt_name]
+                    print(f"    Class 0 (Majority) Accuracy: {res['acc_c0'] * 100:.2f}%")
+                    print(f"    Class 1 (Minority) Accuracy: {res['acc_c1'] * 100:.2f}%")
+
+                    # Format human-readable filename
+                    # Format: regime - optimizer - size - class probability.png
+                    filename = f"{regime_name} - {opt_name} - N_{N} - p_{p}.png"
+                    save_path = os.path.join(results_dir, filename)
+                    title = f"{regime_name} | {opt_name} | N={N}, p={p}"
+
+                    # Plot and Save
+                    plot_results(res_dict, lbfgs_loss, title, save_path=save_path)
+                    print(f"    💾 Plot saved -> {filename}")
+
+                except Exception as e:
+                    print(f"    ❌ Error running {opt_name}: {e}")
+
+
+        # Run Full Batch models
+        run_suite(fb_optimizers, is_mb=False, regime_name="FullBatch")
+
+        # Run Minibatch models
+        run_suite(mb_optimizers, is_mb=True, regime_name="Minibatch")
+
+    print("\n" + "=" * 60)
+    print("✅ All experiments completed successfully! Check the 'results' folder.")
+    print("=" * 60)
