@@ -20,7 +20,7 @@ class Optimizers:
         return w, losses, w_hist
 
     @staticmethod
-    def cg_armijo(model, w0, epochs=100):
+    def cg_armijo(model, w0, dataloader=None, epochs=100, **kwargs):
         """Conjugate Gradient Method with Armijo line search and restart"""
         w = w0.copy()
         losses = []
@@ -138,7 +138,7 @@ class Optimizers:
 
             losses.append(epoch_loss / batches)
             w_hist.append(w.copy())
-        return w, losses
+        return w, losses, w_hist
 
     @staticmethod
     def adadelta(model, w0, dataloader=None, epochs=100, gamma=0.9, eps=1e-8):
