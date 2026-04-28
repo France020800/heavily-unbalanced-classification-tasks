@@ -122,7 +122,7 @@ if __name__ == "__main__":
 
     # 2. Define the optimizer configurations
     fb_optimizers = {
-        'SGD_Armijo': Optimizers.gradient_descent_armijo,
+        'GD_Armijo': Optimizers.gradient_descent_armijo,
         'CG_Armijo': Optimizers.cg_armijo,
         'Adagrad': Optimizers.adagrad,
         'RMSProp': Optimizers.rmsprop,
@@ -170,14 +170,25 @@ if __name__ == "__main__":
                         model, opt_func, w0, is_minibatch=is_mb, epochs=epochs
                     )
 
-                    # Print metrics
                     res = res_dict[opt_name]
-                    print(f"    Class 0 (Majority) Accuracy: {res['acc_c0'] * 100:.2f}%")
-                    print(f"    Class 1 (Minority) Accuracy: {res['acc_c1'] * 100:.2f}%")
+
+                    # Extract final losses
+                    final_global_loss = res['full_losses'][-1]
+                    final_loss_c0 = res['loss_c0'][-1]
+                    final_loss_c1 = res['loss_c1'][-1]
+
+                    # Calculate true global accuracy weighted by probability (p)
+                    global_acc = res['acc_c0'] * (1 - p) + res['acc_c1'] * p
+
+                    print(f"    ✅ Global Accuracy: {global_acc * 100:.2f}%")
+                    print(f"       Class 0 (Majority) Accuracy: {res['acc_c0'] * 100:.2f}%")
+                    print(f"       Class 1 (Minority) Accuracy: {res['acc_c1'] * 100:.2f}%")
+                    print(f"    📉 Final Global Loss: {final_global_loss:.6f}")
+                    print(f"       Final Class 0 Loss: {final_loss_c0:.6f}")
+                    print(f"       Final Class 1 Loss: {final_loss_c1:.6f}")
 
                     # Format human-readable filename
-                    # Format: regime - optimizer - size - class probability.png
-                    filename = f"{regime_name} - {opt_name} - N_{N} - p_{p}.png"
+                    filename = f"{regime_name}-{opt_name}-N_{N}-p_{p}.png"
                     save_path = os.path.join(results_dir, filename)
                     title = f"{regime_name} | {opt_name} | N={N}, p={p}"
 
