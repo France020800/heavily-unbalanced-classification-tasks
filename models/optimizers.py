@@ -6,22 +6,25 @@ class Optimizers:
     def gradient_descent_armijo(model, w0, epochs=100):
         """Gradient descent with Armijo Line Search """
         w = w0.copy()
+        w_hist = []
         losses = []
         for _ in range(epochs):
             loss = model.compute_loss(w)
             grad = model.compute_gradient(w)
             losses.append(loss)
+            w_hist.append(w.copy())
 
             # Direction is the gradient itself
             alpha = armijo_line_search(model, w, grad, grad, loss)
             w = w - alpha * grad
-        return w, losses
+        return w, losses, w_hist
 
     @staticmethod
     def cg_armijo(model, w0, epochs=100):
         """Conjugate Gradient Method with Armijo line search and restart"""
         w = w0.copy()
         losses = []
+        w_hist = []
 
         grad = model.compute_gradient(w)
         direction = grad.copy()
@@ -30,6 +33,7 @@ class Optimizers:
         for i in range(epochs):
             loss = model.compute_loss(w)
             losses.append(loss)
+            w_hist.append(w.copy())
 
             # Restart condition based on gradient-related conditions
             # using the Polak-Ribiere restart heuristic: |grad^T grad_prev| > 0.2 ||grad||^2
@@ -46,13 +50,14 @@ class Optimizers:
             beta = (np.linalg.norm(grad) ** 2) / (np.linalg.norm(grad_prev) ** 2 + 1e-8)
             direction = grad + beta * direction
 
-        return w, losses
+        return w, losses, w_hist
 
     @staticmethod
     def sgd_polyak(model, w0, dataloader, epochs=100):
         """Stochastic gradient descent with Polyak stepsize"""
         w = w0.copy()
         losses = []
+        w_hist = []
         f_star = 0.0  # Lower bound for binary cross-entropy loss
 
         for _ in range(epochs):
@@ -61,6 +66,7 @@ class Optimizers:
             for indices in dataloader:
                 loss = model.compute_loss(w, indices)
                 grad = model.compute_gradient(w, indices)
+                w_hist.append(w.copy())
 
                 epoch_loss += loss
                 batches += 1
@@ -74,7 +80,7 @@ class Optimizers:
 
                 w = w - alpha * grad
             losses.append(epoch_loss / batches)
-        return w, losses
+        return w, losses, w_hist
 
     @staticmethod
     def adagrad(model, w0, dataloader=None, epochs=100, lr=0.01, eps=1e-8):
@@ -82,6 +88,7 @@ class Optimizers:
         w = w0.copy()
         G = np.zeros_like(w)
         losses = []
+        w_hist = []
 
         for _ in range(epochs):
             epoch_loss = 0
@@ -92,6 +99,7 @@ class Optimizers:
             for indices in batch_list:
                 loss = model.compute_loss(w, indices)
                 grad = model.compute_gradient(w, indices)
+                w_hist.append(w.copy())
 
                 epoch_loss += loss
                 batches += 1
@@ -101,7 +109,7 @@ class Optimizers:
                 w = w - (lr / (np.sqrt(G) + eps)) * grad
 
             losses.append(epoch_loss / batches)
-        return w, losses
+        return w, losses, w_hist
 
     @staticmethod
     def rmsprop(model, w0, dataloader=None, epochs=100, lr=0.01, gamma=0.9, eps=1e-8):
@@ -109,6 +117,7 @@ class Optimizers:
         w = w0.copy()
         Eg2 = np.zeros_like(w)
         losses = []
+        w_hist = []
 
         for _ in range(epochs):
             epoch_loss = 0
@@ -119,6 +128,7 @@ class Optimizers:
             for indices in batch_list:
                 loss = model.compute_loss(w, indices)
                 grad = model.compute_gradient(w, indices)
+                w_hist.append(w.copy())
 
                 epoch_loss += loss
                 batches += 1
@@ -137,6 +147,7 @@ class Optimizers:
         Eg2 = np.zeros_like(w)
         Edw2 = np.zeros_like(w)
         losses = []
+        w_hist = []
 
         for _ in range(epochs):
             epoch_loss = 0
@@ -147,6 +158,7 @@ class Optimizers:
             for indices in batch_list:
                 loss = model.compute_loss(w, indices)
                 grad = model.compute_gradient(w, indices)
+                w_hist.append(w.copy())
 
                 epoch_loss += loss
                 batches += 1
@@ -166,7 +178,7 @@ class Optimizers:
                 w = w + dw
 
             losses.append(epoch_loss / batches)
-        return w, losses
+        return w, losses, w_hist
 
     @staticmethod
     def adam(model, w0, dataloader=None, epochs=100, lr=0.001, beta1=0.9, beta2=0.999, eps=1e-8):
@@ -176,6 +188,7 @@ class Optimizers:
         v = np.zeros_like(w)
         t = 0
         losses = []
+        w_hist = []
 
         for _ in range(epochs):
             epoch_loss = 0
@@ -188,6 +201,7 @@ class Optimizers:
                 t += 1
                 loss = model.compute_loss(w, indices)
                 grad = model.compute_gradient(w, indices)
+                w_hist.append(w.copy())
 
                 epoch_loss += loss
                 batches += 1
@@ -201,4 +215,4 @@ class Optimizers:
                 w = w - lr * m_hat / (np.sqrt(v_hat) + eps)
 
             losses.append(epoch_loss / batches)
-        return w, losses
+        return w, losses, w_hist
