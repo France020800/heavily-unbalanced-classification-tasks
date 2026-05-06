@@ -1,5 +1,6 @@
 import numpy as np
-from utils.armijo import armijo_line_search
+from utils.armijo import armijo_line_search, wolfe_line_search
+
 
 class Optimizers:
     @staticmethod
@@ -20,35 +21,36 @@ class Optimizers:
         return w, losses, w_hist
 
     @staticmethod
-    def cg_armijo(model, w0, dataloader=None, epochs=100, **kwargs):
-        """Conjugate Gradient Method with Armijo line search and restart"""
+    def cg_wolfe(model, w0, dataloader=None, epochs=100, **kwargs):
+        """Metodo del Gradiente Coniugato (Formulazione standard da dispense)"""
         w = w0.copy()
         losses = []
         w_hist = []
 
         grad = model.compute_gradient(w)
-        direction = grad.copy()
-        grad_prev = grad.copy()
+
+        # First direction is the negative gradient
+        direction = -grad.copy()
 
         for i in range(epochs):
             loss = model.compute_loss(w)
             losses.append(loss)
             w_hist.append(w.copy())
 
-            # Restart condition based on gradient-related conditions
-            # using the Polak-Ribiere restart heuristic: |grad^T grad_prev| > 0.2 ||grad||^2
-            if i > 0 and abs(np.dot(grad.T, grad_prev)) > 0.2 * np.linalg.norm(grad) ** 2:
-                direction = grad.copy()
+            # Break condition: if the gradient is close to zero, we are at a local minimum
+            if np.linalg.norm(grad) <= 1e-6:
+                break
 
-            alpha = armijo_line_search(model, w, direction, grad, loss)
-            w = w - alpha * direction
+            alpha = wolfe_line_search(model, w, direction, grad, loss)
+
+            w = w + alpha * direction
 
             grad_prev = grad.copy()
             grad = model.compute_gradient(w)
 
-            # Fletcher-Reeves beta update
             beta = (np.linalg.norm(grad) ** 2) / (np.linalg.norm(grad_prev) ** 2 + 1e-8)
-            direction = grad + beta * direction
+
+            direction = -grad + beta * direction
 
         return w, losses, w_hist
 

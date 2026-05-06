@@ -106,8 +106,7 @@ def plot_results(results_dict, lbfgs_opt_loss, title_suffix, save_path=None):
         plt.show()
 
 
-# --- Example Execution on a Single Dataset ---
-if __name__ == "__main__":
+def main():
     # 1. Setup Results Directory and Logging
     results_dir = "results"
     os.makedirs(results_dir, exist_ok=True)
@@ -123,7 +122,7 @@ if __name__ == "__main__":
     # 2. Define the optimizer configurations
     fb_optimizers = {
         'GD_Armijo': Optimizers.gradient_descent_armijo,
-        'CG_Armijo': Optimizers.cg_armijo,
+        'CG_Armijo': Optimizers.cg_wolfe,
         'Adagrad': Optimizers.adagrad,
         'RMSProp': Optimizers.rmsprop,
         'AdaDelta': Optimizers.adadelta,
@@ -155,7 +154,6 @@ if __name__ == "__main__":
         # Baseline Calculation
         w_opt, lbfgs_loss = run_lbfgs_b(model, w0)
         print(f"🟢 L-BFGS-B Global Minimum Loss: {lbfgs_loss:.6f}\n")
-
 
         # --- Helper Function for Execution ---
         def run_suite(suite_dict, is_mb, regime_name):
@@ -199,7 +197,6 @@ if __name__ == "__main__":
                 except Exception as e:
                     print(f"    ❌ Error running {opt_name}: {e}")
 
-
         # Run Full Batch models
         run_suite(fb_optimizers, is_mb=False, regime_name="FullBatch")
 
@@ -209,3 +206,90 @@ if __name__ == "__main__":
     print("\n" + "=" * 60)
     print("✅ All experiments completed successfully! Check the 'results' folder.")
     print("=" * 60)
+
+
+def single_run():
+    # 1. Setup Results Directory and Logging
+    results_dir = "results"
+    os.makedirs(results_dir, exist_ok=True)
+
+    # Using a different log name to avoid overwriting your full suite logs
+    log_path = os.path.join(results_dir, "single_experiment_log.txt")
+    sys.stdout = DualLogger(log_path)
+
+    print("=" * 60)
+    print("🚀 Starting Single Optimization Experiment")
+    print(f"Timestamp: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print("=" * 60)
+
+    # 2. Hardcoded Configuration for this specific test
+    N = 5000
+    p = 0.01
+    epochs = 1000
+    opt_name = 'Adam'
+    regime_name = 'FullBatch'
+
+    # 3. Generate Datasets and extract only the one we need
+    print("\nGenerating datasets...")
+    datasets_dict = generate_experiment_datasets()
+    X, y = datasets_dict[(N, p)]
+
+    print(f"\n{'=' * 60}")
+    print(f"📊 DATASET: Size (N) = {N} | Minority Class Ratio (p) = {p}")
+    print(f"{'=' * 60}")
+
+    model = LogisticRegressionModel(X, y)
+    w0 = np.zeros(model.n)
+
+    # Baseline Calculation
+    w_opt, lbfgs_loss = run_lbfgs_b(model, w0)
+    print(f"🟢 L-BFGS-B Global Minimum Loss: {lbfgs_loss:.6f}\n")
+
+    print(f"--- Running {regime_name} Regime ---")
+    print(f"  ▶ Optimizer: {opt_name} (Epochs: {epochs})")
+
+    try:
+        # 4. Run the specific algorithm
+        res_dict = {}
+        res_dict[opt_name] = run_single_experiment(
+            model, Optimizers.adam, w0, is_minibatch=False, epochs=epochs
+        )
+
+        res = res_dict[opt_name]
+
+        # Extract final losses (at the 500th epoch)
+        final_global_loss = res['full_losses'][-1]
+        final_loss_c0 = res['loss_c0'][-1]
+        final_loss_c1 = res['loss_c1'][-1]
+
+        # Calculate true global accuracy weighted by probability (p)
+        global_acc = res['acc_c0'] * (1 - p) + res['acc_c1'] * p
+
+        # Print metrics
+        print(f"    ✅ Global Accuracy: {global_acc * 100:.2f}%")
+        print(f"       Class 0 (Majority) Accuracy: {res['acc_c0'] * 100:.2f}%")
+        print(f"       Class 1 (Minority) Accuracy: {res['acc_c1'] * 100:.2f}%")
+        print(f"    📉 Final Global Loss: {final_global_loss:.6f}")
+        print(f"       Final Class 0 Loss: {final_loss_c0:.6f}")
+        print(f"       Final Class 1 Loss: {final_loss_c1:.6f}")
+
+        # Format human-readable filename including epochs to distinguish it
+        filename = f"SingleExp - {regime_name} - {opt_name} - N_{N} - p_{p} - {epochs}ep.png"
+        save_path = os.path.join(results_dir, filename)
+        title = f"{regime_name} | {opt_name} | N={N}, p={p} | Epochs={epochs}"
+
+        # Plot and Save
+        plot_results(res_dict, lbfgs_loss, title, save_path=save_path)
+        print(f"    💾 Plot saved -> {filename}")
+
+    except Exception as e:
+        print(f"    ❌ Error running {opt_name}: {e}")
+
+    print("\n" + "=" * 60)
+    print("✅ Single experiment completed successfully! Check the 'results' folder.")
+    print("=" * 60)
+
+
+# --- Example Execution on a Single Dataset ---
+if __name__ == "__main__":
+    main()
