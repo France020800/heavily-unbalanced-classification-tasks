@@ -13,11 +13,13 @@ from utils.metrics_and_baseline import get_minibatches, compute_class_metrics, r
 
 
 def run_single_experiment(model, optimizer_func, w0, is_minibatch=False, epochs=100, **kwargs):
-    """Runs an optimizer and tracks full and per-class losses over epochs."""
+    """Esegue un ottimizzatore e traccia loss globali, per classe e batch-level."""
 
     dataloader = get_minibatches(model.N, batch_size=32) if is_minibatch else None
 
-    w_final, full_losses, w_history = optimizer_func(model, w0, dataloader=dataloader, epochs=epochs, **kwargs)
+    w_final, epoch_losses, batch_losses, w_history = optimizer_func(
+        model, w0, dataloader=dataloader, epochs=epochs, **kwargs
+    )
 
     loss_history_c0 = []
     loss_history_c1 = []
@@ -31,7 +33,8 @@ def run_single_experiment(model, optimizer_func, w0, is_minibatch=False, epochs=
 
     return {
         'w_final': w_final,
-        'full_losses': full_losses,
+        'full_losses': epoch_losses,
+        'batch_losses': batch_losses,
         'loss_c0': loss_history_c0,
         'loss_c1': loss_history_c1,
         'acc_c0': acc_c0,
@@ -40,74 +43,78 @@ def run_single_experiment(model, optimizer_func, w0, is_minibatch=False, epochs=
 
 
 def plot_results(results_dict, lbfgs_opt_loss, title_suffix, save_path=None):
-    """Plots the overall loss, per-class losses, and an overlapping view."""
-    fig, axes = plt.subplots(2, 2, figsize=(16, 12))
-    fig.suptitle(f"Optimization Performance: {title_suffix}", fontsize=18)
-
-    ax_full = axes[0, 0]
-    ax_overlap = axes[0, 1]
-    ax_c0 = axes[1, 0]
-    ax_c1 = axes[1, 1]
+    """Genera una dashboard 3x2 con scala logaritmica e f - f*."""
+    fig, axes = plt.subplots(3, 2, figsize=(16, 18))
+    fig.suptitle(f"Optimization Performance: {title_suffix}", fontsize=20)
 
     colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
+    f_star = lbfgs_opt_loss
 
     for i, (method_name, metrics) in enumerate(results_dict.items()):
-        epochs = range(len(metrics['full_losses']))
-        color = colors[i % len(colors)]  # Cycle through colors
+        color = colors[i % len(colors)]
+        epochs = range(1, len(metrics['full_losses']) + 1)
+        total_batches = len(metrics['batch_losses'])
+        x_batches = np.linspace(0, len(metrics['full_losses']), total_batches)
 
-        # Plot 1: Full Loss
-        ax_full.plot(epochs, metrics['full_losses'], color=color,
-                     label=f"{method_name} (Avg Acc: {np.mean([metrics['acc_c0'], metrics['acc_c1']]):.2f})")
+        # Calcolo di f - f* (con limite inferiore di sicurezza per la scala logaritmica)
+        f_diff_epoch = np.maximum(np.array(metrics['full_losses']) - f_star, 1e-10)
+        f_diff_batch = np.maximum(np.array(metrics['batch_losses']) - f_star, 1e-10)
 
-        # Plot 2: Overlap of Class 0 and Class 1
-        ax_overlap.plot(epochs, metrics['loss_c0'], color=color, linestyle='-', label=f"{method_name} (Class 0)")
-        ax_overlap.plot(epochs, metrics['loss_c1'], color=color, linestyle='--', label=f"{method_name} (Class 1)")
+        # 1. Full Training Loss (f - f*) [LOG SCALE]
+        axes[0, 0].plot(epochs, f_diff_epoch, color=color, label=method_name)
+        axes[0, 0].set_yscale('log')
+        axes[0, 0].set_ylabel("Loss (f - f*) [Log]")
 
-        # Plot 3: Class 0 Loss (Majority)
-        ax_c0.plot(epochs, metrics['loss_c0'], color=color, label=method_name)
+        # 2. Overlap Class Losses [Standard Loss, LOG SCALE]
+        axes[0, 1].plot(epochs, metrics['loss_c0'], color=color, linestyle='-', label=f"{method_name} (C0)")
+        axes[0, 1].plot(epochs, metrics['loss_c1'], color=color, linestyle='--', label=f"{method_name} (C1)")
+        axes[0, 1].set_yscale('log')
+        axes[0, 1].set_ylabel("Raw Loss [Log]")
 
-        # Plot 4: Class 1 Loss (Minority)
-        ax_c1.plot(epochs, metrics['loss_c1'], color=color, label=method_name)
+        # 3. STOCHASTIC NOISE: Batch vs Epoch Loss (f - f*) [LOG SCALE]
+        axes[1, 0].plot(x_batches, f_diff_batch, color=color, alpha=0.3, linewidth=0.5)
+        axes[1, 0].plot(epochs, f_diff_epoch, color=color, linewidth=2, label=f"{method_name} (Smooth)")
+        axes[1, 0].set_yscale('log')
+        axes[1, 0].set_ylabel("Loss (f - f*) [Log]")
 
-    # --- Plot 1: Full Loss ---
-    ax_full.axhline(y=lbfgs_opt_loss, color='r', linestyle=':', label='L-BFGS-B (Global Optimum)')
-    ax_full.set_title("Full Training Loss")
-    ax_full.set_xlabel("Epochs")
-    ax_full.set_ylabel("Loss")
-    ax_full.legend()
-    ax_full.grid(True, alpha=0.3)
+        # 4. Zoom sui primi batch (f - f*) [LOG SCALE]
+        n_zoom = min(total_batches, 500)
+        axes[1, 1].plot(x_batches[:n_zoom], f_diff_batch[:n_zoom], color=color, alpha=0.6)
+        axes[1, 1].set_yscale('log')
+        axes[1, 1].set_ylabel("Loss (f - f*) [Log]")
 
-    # --- Plot 2: Overlapping Classes ---
-    ax_overlap.set_title("Overlapping Class Losses (Solid: C0, Dashed: C1)")
-    ax_overlap.set_xlabel("Epochs")
-    ax_overlap.set_ylabel("Loss")
-    ax_overlap.legend()
-    ax_overlap.grid(True, alpha=0.3)
+        # 5. Class 0 Loss [LOG SCALE]
+        axes[2, 0].plot(epochs, metrics['loss_c0'], color=color, label=method_name)
+        axes[2, 0].set_yscale('log')
+        axes[2, 0].set_ylabel("Raw Loss [Log]")
 
-    # --- Plot 3: Class 0 ---
-    ax_c0.set_title("Loss - Class 0 (Majority)")
-    ax_c0.set_xlabel("Epochs")
-    ax_c0.set_ylabel("Loss")
-    ax_c0.legend()
-    ax_c0.grid(True, alpha=0.3)
+        # 6. Class 1 Loss [LOG SCALE]
+        axes[2, 1].plot(epochs, metrics['loss_c1'], color=color, label=method_name)
+        axes[2, 1].set_yscale('log')
+        axes[2, 1].set_ylabel("Raw Loss [Log]")
 
-    # --- Plot 4: Class 1 ---
-    ax_c1.set_title("Loss - Class 1 (Minority)")
-    ax_c1.set_xlabel("Epochs")
-    ax_c1.set_ylabel("Loss")
-    ax_c1.legend()
-    ax_c1.grid(True, alpha=0.3)
+    # Formattazione Grafici
+    titles = [
+        "Global Loss (f - f*)", "Overlapping Classes (Solid:C0, Dash:C1)",
+        "Stochastic Noise (f - f*)", "Stochastic Noise (Initial Zoom)",
+        "Loss - Class 0 (Majority)", "Loss - Class 1 (Minority)"
+    ]
 
-    plt.tight_layout()
+    for ax, title in zip(axes.flat, titles):
+        ax.set_title(title, fontsize=14)
+        ax.set_xlabel("Epochs")
+        ax.grid(True, which="both", ls="--", alpha=0.3)  # Grid migliore per log scale
+        ax.legend(fontsize=8)
+
+    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
     if save_path:
-        plt.savefig(save_path, dpi=300, bbox_inches='tight', facecolor='white')
+        plt.savefig(save_path, dpi=150, bbox_inches='tight')
         plt.close(fig)
     else:
         plt.show()
 
 
 def main():
-    # 1. Setup Results Directory and Logging
     results_dir = "results"
     os.makedirs(results_dir, exist_ok=True)
 
@@ -119,7 +126,6 @@ def main():
     print(f"Timestamp: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 60)
 
-    # 2. Define the optimizer configurations
     fb_optimizers = {
         'GD_Armijo': Optimizers.gradient_descent_armijo,
         'CG_Armijo': Optimizers.cg_wolfe,
@@ -137,12 +143,10 @@ def main():
         'Adam': Optimizers.adam
     }
 
-    # 3. Generate Datasets
     print("\nGenerating datasets...")
     datasets_dict = generate_experiment_datasets()
-    epochs = 150
+    epochs = 300
 
-    # 4. Main Experiment Loop
     for (N, p), (X, y) in datasets_dict.items():
         print(f"\n{'=' * 60}")
         print(f"📊 DATASET: Size (N) = {N} | Minority Class Ratio (p) = {p}")
@@ -151,11 +155,9 @@ def main():
         model = LogisticRegressionModel(X, y)
         w0 = np.zeros(model.n)
 
-        # Baseline Calculation
         w_opt, lbfgs_loss = run_lbfgs_b(model, w0)
         print(f"🟢 L-BFGS-B Global Minimum Loss: {lbfgs_loss:.6f}\n")
 
-        # --- Helper Function for Execution ---
         def run_suite(suite_dict, is_mb, regime_name):
             print(f"\n--- Running {regime_name} Regime ---")
             for opt_name, opt_func in suite_dict.items():
@@ -209,11 +211,9 @@ def main():
 
 
 def single_run():
-    # 1. Setup Results Directory and Logging
     results_dir = "results"
     os.makedirs(results_dir, exist_ok=True)
 
-    # Using a different log name to avoid overwriting your full suite logs
     log_path = os.path.join(results_dir, "single_experiment_log.txt")
     sys.stdout = DualLogger(log_path)
 
@@ -222,14 +222,12 @@ def single_run():
     print(f"Timestamp: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 60)
 
-    # 2. Hardcoded Configuration for this specific test
     N = 5000
     p = 0.01
     epochs = 1000
     opt_name = 'Adam'
     regime_name = 'FullBatch'
 
-    # 3. Generate Datasets and extract only the one we need
     print("\nGenerating datasets...")
     datasets_dict = generate_experiment_datasets()
     X, y = datasets_dict[(N, p)]
@@ -249,7 +247,6 @@ def single_run():
     print(f"  ▶ Optimizer: {opt_name} (Epochs: {epochs})")
 
     try:
-        # 4. Run the specific algorithm
         res_dict = {}
         res_dict[opt_name] = run_single_experiment(
             model, Optimizers.adam, w0, is_minibatch=False, epochs=epochs
@@ -257,12 +254,10 @@ def single_run():
 
         res = res_dict[opt_name]
 
-        # Extract final losses (at the 500th epoch)
         final_global_loss = res['full_losses'][-1]
         final_loss_c0 = res['loss_c0'][-1]
         final_loss_c1 = res['loss_c1'][-1]
 
-        # Calculate true global accuracy weighted by probability (p)
         global_acc = res['acc_c0'] * (1 - p) + res['acc_c1'] * p
 
         # Print metrics
@@ -273,7 +268,6 @@ def single_run():
         print(f"       Final Class 0 Loss: {final_loss_c0:.6f}")
         print(f"       Final Class 1 Loss: {final_loss_c1:.6f}")
 
-        # Format human-readable filename including epochs to distinguish it
         filename = f"SingleExp - {regime_name} - {opt_name} - N_{N} - p_{p} - {epochs}ep.png"
         save_path = os.path.join(results_dir, filename)
         title = f"{regime_name} | {opt_name} | N={N}, p={p} | Epochs={epochs}"
@@ -290,6 +284,5 @@ def single_run():
     print("=" * 60)
 
 
-# --- Example Execution on a Single Dataset ---
 if __name__ == "__main__":
     main()

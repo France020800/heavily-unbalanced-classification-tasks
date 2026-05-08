@@ -1,0 +1,901 @@
+============================================================
+🚀 Starting Optimization Experiments Pipeline
+Timestamp: 2026-05-07 22:38:46
+============================================================
+
+Generating datasets...
+Dataset [N= 500, p=0.100] -> Actual positive ratio: 0.1100 (Positives: 55)
+Dataset [N= 500, p=0.010] -> Actual positive ratio: 0.0200 (Positives: 10)
+Dataset [N= 500, p=0.005] -> Actual positive ratio: 0.0160 (Positives: 8)
+Dataset [N=2000, p=0.100] -> Actual positive ratio: 0.1025 (Positives: 205)
+Dataset [N=2000, p=0.010] -> Actual positive ratio: 0.0145 (Positives: 29)
+Dataset [N=2000, p=0.005] -> Actual positive ratio: 0.0095 (Positives: 19)
+Dataset [N=5000, p=0.100] -> Actual positive ratio: 0.1054 (Positives: 527)
+Dataset [N=5000, p=0.010] -> Actual positive ratio: 0.0160 (Positives: 80)
+Dataset [N=5000, p=0.005] -> Actual positive ratio: 0.0110 (Positives: 55)
+
+============================================================
+📊 DATASET: Size (N) = 500 | Minority Class Ratio (p) = 0.1
+============================================================
+🟢 L-BFGS-B Global Minimum Loss: 0.243623
+
+
+--- Running FullBatch Regime ---
+  ▶ Optimizer: GD_Armijo
+    ✅ Global Accuracy: 92.83%
+       Class 0 (Majority) Accuracy: 99.10%
+       Class 1 (Minority) Accuracy: 36.36%
+    📉 Final Global Loss: 0.243623
+       Final Class 0 Loss: 0.086438
+       Final Class 1 Loss: 1.515397
+    💾 Plot saved -> FullBatch-GD_Armijo-N_500-p_0.1.png
+  ▶ Optimizer: CG_Armijo
+    ✅ Global Accuracy: 92.83%
+       Class 0 (Majority) Accuracy: 99.10%
+       Class 1 (Minority) Accuracy: 36.36%
+    📉 Final Global Loss: 0.243623
+       Final Class 0 Loss: 0.086434
+       Final Class 1 Loss: 1.515430
+    💾 Plot saved -> FullBatch-CG_Armijo-N_500-p_0.1.png
+  ▶ Optimizer: Adagrad
+    ✅ Global Accuracy: 89.93%
+       Class 0 (Majority) Accuracy: 95.28%
+       Class 1 (Minority) Accuracy: 41.82%
+    📉 Final Global Loss: 0.356574
+       Final Class 0 Loss: 0.275218
+       Final Class 1 Loss: 1.013295
+    💾 Plot saved -> FullBatch-Adagrad-N_500-p_0.1.png
+  ▶ Optimizer: RMSProp
+    ✅ Global Accuracy: 93.23%
+       Class 0 (Majority) Accuracy: 99.55%
+       Class 1 (Minority) Accuracy: 36.36%
+    📉 Final Global Loss: 0.243747
+       Final Class 0 Loss: 0.083536
+       Final Class 1 Loss: 1.540085
+    💾 Plot saved -> FullBatch-RMSProp-N_500-p_0.1.png
+  ▶ Optimizer: AdaDelta
+    ✅ Global Accuracy: 89.33%
+       Class 0 (Majority) Accuracy: 94.61%
+       Class 1 (Minority) Accuracy: 41.82%
+    📉 Final Global Loss: 0.454648
+       Final Class 0 Loss: 0.406081
+       Final Class 1 Loss: 0.842762
+    💾 Plot saved -> FullBatch-AdaDelta-N_500-p_0.1.png
+  ▶ Optimizer: Adam
+    ✅ Global Accuracy: 89.93%
+       Class 0 (Majority) Accuracy: 95.28%
+       Class 1 (Minority) Accuracy: 41.82%
+    📉 Final Global Loss: 0.371336
+       Final Class 0 Loss: 0.296003
+       Final Class 1 Loss: 0.977906
+    💾 Plot saved -> FullBatch-Adam-N_500-p_0.1.png
+
+--- Running Minibatch Regime ---
+  ▶ Optimizer: SGD_Polyak
+    ✅ Global Accuracy: 87.53%
+       Class 0 (Majority) Accuracy: 92.81%
+       Class 1 (Minority) Accuracy: 40.00%
+    📉 Final Global Loss: 0.437499
+       Final Class 0 Loss: 0.190606
+       Final Class 1 Loss: 1.632544
+    💾 Plot saved -> Minibatch-SGD_Polyak-N_500-p_0.1.png
+  ▶ Optimizer: Adagrad
+    ✅ Global Accuracy: 92.93%
+       Class 0 (Majority) Accuracy: 98.20%
+       Class 1 (Minority) Accuracy: 45.45%
+    📉 Final Global Loss: 0.272028
+       Final Class 0 Loss: 0.144815
+       Final Class 1 Loss: 1.285945
+    💾 Plot saved -> Minibatch-Adagrad-N_500-p_0.1.png
+  ▶ Optimizer: RMSProp
+    ✅ Global Accuracy: 92.87%
+       Class 0 (Majority) Accuracy: 99.55%
+       Class 1 (Minority) Accuracy: 32.73%
+    📉 Final Global Loss: 0.256156
+       Final Class 0 Loss: 0.084432
+       Final Class 1 Loss: 1.553763
+    💾 Plot saved -> Minibatch-RMSProp-N_500-p_0.1.png
+  ▶ Optimizer: AdaDelta
+    ✅ Global Accuracy: 93.55%
+       Class 0 (Majority) Accuracy: 99.10%
+       Class 1 (Minority) Accuracy: 43.64%
+    📉 Final Global Loss: 0.251796
+       Final Class 0 Loss: 0.109023
+       Final Class 1 Loss: 1.419015
+    💾 Plot saved -> Minibatch-AdaDelta-N_500-p_0.1.png
+  ▶ Optimizer: Adam
+    ✅ Global Accuracy: 93.37%
+       Class 0 (Majority) Accuracy: 99.10%
+       Class 1 (Minority) Accuracy: 41.82%
+    📉 Final Global Loss: 0.248375
+       Final Class 0 Loss: 0.094791
+       Final Class 1 Loss: 1.460844
+    💾 Plot saved -> Minibatch-Adam-N_500-p_0.1.png
+
+============================================================
+📊 DATASET: Size (N) = 500 | Minority Class Ratio (p) = 0.01
+============================================================
+🟢 L-BFGS-B Global Minimum Loss: 0.087339
+
+
+--- Running FullBatch Regime ---
+  ▶ Optimizer: GD_Armijo
+    ✅ Global Accuracy: 99.00%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 0.00%
+    📉 Final Global Loss: 0.087521
+       Final Class 0 Loss: 0.020528
+       Final Class 1 Loss: 3.370173
+    💾 Plot saved -> FullBatch-GD_Armijo-N_500-p_0.01.png
+  ▶ Optimizer: CG_Armijo
+    ✅ Global Accuracy: 99.00%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 0.00%
+    📉 Final Global Loss: 0.087339
+       Final Class 0 Loss: 0.019190
+       Final Class 1 Loss: 3.426616
+    💾 Plot saved -> FullBatch-CG_Armijo-N_500-p_0.01.png
+  ▶ Optimizer: Adagrad
+    ✅ Global Accuracy: 94.86%
+       Class 0 (Majority) Accuracy: 95.51%
+       Class 1 (Minority) Accuracy: 30.00%
+    📉 Final Global Loss: 0.293834
+       Final Class 0 Loss: 0.260897
+       Final Class 1 Loss: 1.896303
+    💾 Plot saved -> FullBatch-Adagrad-N_500-p_0.01.png
+  ▶ Optimizer: RMSProp
+    ✅ Global Accuracy: 99.10%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 10.00%
+    📉 Final Global Loss: 0.094256
+       Final Class 0 Loss: 0.032003
+       Final Class 1 Loss: 3.139279
+    💾 Plot saved -> FullBatch-RMSProp-N_500-p_0.01.png
+  ▶ Optimizer: AdaDelta
+    ✅ Global Accuracy: 93.24%
+       Class 0 (Majority) Accuracy: 93.88%
+       Class 1 (Minority) Accuracy: 30.00%
+    📉 Final Global Loss: 0.417557
+       Final Class 0 Loss: 0.398568
+       Final Class 1 Loss: 1.316311
+    💾 Plot saved -> FullBatch-AdaDelta-N_500-p_0.01.png
+  ▶ Optimizer: Adam
+    ✅ Global Accuracy: 94.65%
+       Class 0 (Majority) Accuracy: 95.31%
+       Class 1 (Minority) Accuracy: 30.00%
+    📉 Final Global Loss: 0.313564
+       Final Class 0 Loss: 0.283302
+       Final Class 1 Loss: 1.774741
+    💾 Plot saved -> FullBatch-Adam-N_500-p_0.01.png
+
+--- Running Minibatch Regime ---
+  ▶ Optimizer: SGD_Polyak
+    ✅ Global Accuracy: 98.90%
+       Class 0 (Majority) Accuracy: 99.80%
+       Class 1 (Minority) Accuracy: 10.00%
+    📉 Final Global Loss: 0.171324
+       Final Class 0 Loss: 0.027133
+       Final Class 1 Loss: 3.669922
+    💾 Plot saved -> Minibatch-SGD_Polyak-N_500-p_0.01.png
+  ▶ Optimizer: Adagrad
+    ✅ Global Accuracy: 98.09%
+       Class 0 (Majority) Accuracy: 98.78%
+       Class 1 (Minority) Accuracy: 30.00%
+    📉 Final Global Loss: 0.163381
+       Final Class 0 Loss: 0.110807
+       Final Class 1 Loss: 2.864249
+    💾 Plot saved -> Minibatch-Adagrad-N_500-p_0.01.png
+  ▶ Optimizer: RMSProp
+    ✅ Global Accuracy: 99.00%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 0.00%
+    📉 Final Global Loss: 0.093060
+       Final Class 0 Loss: 0.019811
+       Final Class 1 Loss: 3.476734
+    💾 Plot saved -> Minibatch-RMSProp-N_500-p_0.01.png
+  ▶ Optimizer: AdaDelta
+    ✅ Global Accuracy: 99.20%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 20.00%
+    📉 Final Global Loss: 0.108358
+       Final Class 0 Loss: 0.044261
+       Final Class 1 Loss: 3.329641
+    💾 Plot saved -> Minibatch-AdaDelta-N_500-p_0.01.png
+  ▶ Optimizer: Adam
+    ✅ Global Accuracy: 99.20%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 20.00%
+    📉 Final Global Loss: 0.098658
+       Final Class 0 Loss: 0.036272
+       Final Class 1 Loss: 3.242462
+    💾 Plot saved -> Minibatch-Adam-N_500-p_0.01.png
+
+============================================================
+📊 DATASET: Size (N) = 500 | Minority Class Ratio (p) = 0.005
+============================================================
+🟢 L-BFGS-B Global Minimum Loss: 0.075880
+
+
+--- Running FullBatch Regime ---
+  ▶ Optimizer: GD_Armijo
+    ✅ Global Accuracy: 99.50%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 0.00%
+    📉 Final Global Loss: 0.076341
+       Final Class 0 Loss: 0.017876
+       Final Class 1 Loss: 3.671978
+    💾 Plot saved -> FullBatch-GD_Armijo-N_500-p_0.005.png
+  ▶ Optimizer: CG_Armijo
+    ✅ Global Accuracy: 99.50%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 0.00%
+    📉 Final Global Loss: 0.075880
+       Final Class 0 Loss: 0.015924
+       Final Class 1 Loss: 3.763196
+    💾 Plot saved -> FullBatch-CG_Armijo-N_500-p_0.005.png
+  ▶ Optimizer: Adagrad
+    ✅ Global Accuracy: 95.18%
+       Class 0 (Majority) Accuracy: 95.53%
+       Class 1 (Minority) Accuracy: 25.00%
+    📉 Final Global Loss: 0.289082
+       Final Class 0 Loss: 0.260757
+       Final Class 1 Loss: 2.016472
+    💾 Plot saved -> FullBatch-Adagrad-N_500-p_0.005.png
+  ▶ Optimizer: RMSProp
+    ✅ Global Accuracy: 99.50%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 0.00%
+    📉 Final Global Loss: 0.084819
+       Final Class 0 Loss: 0.029841
+       Final Class 1 Loss: 3.457592
+    💾 Plot saved -> FullBatch-RMSProp-N_500-p_0.005.png
+  ▶ Optimizer: AdaDelta
+    ✅ Global Accuracy: 93.36%
+       Class 0 (Majority) Accuracy: 93.70%
+       Class 1 (Minority) Accuracy: 25.00%
+    📉 Final Global Loss: 0.414654
+       Final Class 0 Loss: 0.398758
+       Final Class 1 Loss: 1.352075
+    💾 Plot saved -> FullBatch-AdaDelta-N_500-p_0.005.png
+  ▶ Optimizer: Adam
+    ✅ Global Accuracy: 94.77%
+       Class 0 (Majority) Accuracy: 95.12%
+       Class 1 (Minority) Accuracy: 25.00%
+    📉 Final Global Loss: 0.309178
+       Final Class 0 Loss: 0.283241
+       Final Class 1 Loss: 1.876798
+    💾 Plot saved -> FullBatch-Adam-N_500-p_0.005.png
+
+--- Running Minibatch Regime ---
+  ▶ Optimizer: SGD_Polyak
+    ✅ Global Accuracy: 99.50%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 0.00%
+    📉 Final Global Loss: 0.155001
+       Final Class 0 Loss: 0.010174
+       Final Class 1 Loss: 5.625444
+    💾 Plot saved -> Minibatch-SGD_Polyak-N_500-p_0.005.png
+  ▶ Optimizer: Adagrad
+    ✅ Global Accuracy: 98.35%
+       Class 0 (Majority) Accuracy: 98.78%
+       Class 1 (Minority) Accuracy: 12.50%
+    📉 Final Global Loss: 0.156578
+       Final Class 0 Loss: 0.109277
+       Final Class 1 Loss: 3.108094
+    💾 Plot saved -> Minibatch-Adagrad-N_500-p_0.005.png
+  ▶ Optimizer: RMSProp
+    ✅ Global Accuracy: 99.50%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 0.00%
+    📉 Final Global Loss: 0.082594
+       Final Class 0 Loss: 0.018323
+       Final Class 1 Loss: 3.673270
+    💾 Plot saved -> Minibatch-RMSProp-N_500-p_0.005.png
+  ▶ Optimizer: AdaDelta
+    ✅ Global Accuracy: 99.56%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 12.50%
+    📉 Final Global Loss: 0.097592
+       Final Class 0 Loss: 0.040643
+       Final Class 1 Loss: 3.694228
+    💾 Plot saved -> Minibatch-AdaDelta-N_500-p_0.005.png
+  ▶ Optimizer: Adam
+    ✅ Global Accuracy: 99.56%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 12.50%
+    📉 Final Global Loss: 0.094468
+       Final Class 0 Loss: 0.034223
+       Final Class 1 Loss: 3.625247
+    💾 Plot saved -> Minibatch-Adam-N_500-p_0.005.png
+
+============================================================
+📊 DATASET: Size (N) = 2000 | Minority Class Ratio (p) = 0.1
+============================================================
+🟢 L-BFGS-B Global Minimum Loss: 0.196465
+
+
+--- Running FullBatch Regime ---
+  ▶ Optimizer: GD_Armijo
+    ✅ Global Accuracy: 92.49%
+       Class 0 (Majority) Accuracy: 98.22%
+       Class 1 (Minority) Accuracy: 40.98%
+    📉 Final Global Loss: 0.196465
+       Final Class 0 Loss: 0.082290
+       Final Class 1 Loss: 1.196191
+    💾 Plot saved -> FullBatch-GD_Armijo-N_2000-p_0.1.png
+  ▶ Optimizer: CG_Armijo
+    ✅ Global Accuracy: 92.49%
+       Class 0 (Majority) Accuracy: 98.22%
+       Class 1 (Minority) Accuracy: 40.98%
+    📉 Final Global Loss: 0.196465
+       Final Class 0 Loss: 0.082284
+       Final Class 1 Loss: 1.196250
+    💾 Plot saved -> FullBatch-CG_Armijo-N_2000-p_0.1.png
+  ▶ Optimizer: Adagrad
+    ✅ Global Accuracy: 88.79%
+       Class 0 (Majority) Accuracy: 92.48%
+       Class 1 (Minority) Accuracy: 55.61%
+    📉 Final Global Loss: 0.343225
+       Final Class 0 Loss: 0.301139
+       Final Class 1 Loss: 0.709673
+    💾 Plot saved -> FullBatch-Adagrad-N_2000-p_0.1.png
+  ▶ Optimizer: RMSProp
+    ✅ Global Accuracy: 92.44%
+       Class 0 (Majority) Accuracy: 98.22%
+       Class 1 (Minority) Accuracy: 40.49%
+    📉 Final Global Loss: 0.196570
+       Final Class 0 Loss: 0.081518
+       Final Class 1 Loss: 1.203999
+    💾 Plot saved -> FullBatch-RMSProp-N_2000-p_0.1.png
+  ▶ Optimizer: AdaDelta
+    ✅ Global Accuracy: 87.97%
+       Class 0 (Majority) Accuracy: 90.64%
+       Class 1 (Minority) Accuracy: 63.90%
+    📉 Final Global Loss: 0.455858
+       Final Class 0 Loss: 0.434534
+       Final Class 1 Loss: 0.637099
+    💾 Plot saved -> FullBatch-AdaDelta-N_2000-p_0.1.png
+  ▶ Optimizer: Adam
+    ✅ Global Accuracy: 88.79%
+       Class 0 (Majority) Accuracy: 92.42%
+       Class 1 (Minority) Accuracy: 56.10%
+    📉 Final Global Loss: 0.361452
+       Final Class 0 Loss: 0.322927
+       Final Class 1 Loss: 0.694911
+    💾 Plot saved -> FullBatch-Adam-N_2000-p_0.1.png
+
+--- Running Minibatch Regime ---
+  ▶ Optimizer: SGD_Polyak
+    ✅ Global Accuracy: 91.95%
+       Class 0 (Majority) Accuracy: 96.10%
+       Class 1 (Minority) Accuracy: 54.63%
+    📉 Final Global Loss: 0.304817
+       Final Class 0 Loss: 0.134793
+       Final Class 1 Loss: 1.518448
+    💾 Plot saved -> Minibatch-SGD_Polyak-N_2000-p_0.1.png
+  ▶ Optimizer: Adagrad
+    ✅ Global Accuracy: 92.33%
+       Class 0 (Majority) Accuracy: 97.55%
+       Class 1 (Minority) Accuracy: 45.37%
+    📉 Final Global Loss: 0.206951
+       Final Class 0 Loss: 0.110917
+       Final Class 1 Loss: 1.040270
+    💾 Plot saved -> Minibatch-Adagrad-N_2000-p_0.1.png
+  ▶ Optimizer: RMSProp
+    ✅ Global Accuracy: 92.44%
+       Class 0 (Majority) Accuracy: 98.05%
+       Class 1 (Minority) Accuracy: 41.95%
+    📉 Final Global Loss: 0.200728
+       Final Class 0 Loss: 0.082545
+       Final Class 1 Loss: 1.201893
+    💾 Plot saved -> Minibatch-RMSProp-N_2000-p_0.1.png
+  ▶ Optimizer: AdaDelta
+    ✅ Global Accuracy: 92.49%
+       Class 0 (Majority) Accuracy: 98.27%
+       Class 1 (Minority) Accuracy: 40.49%
+    📉 Final Global Loss: 0.197182
+       Final Class 0 Loss: 0.083451
+       Final Class 1 Loss: 1.188796
+    💾 Plot saved -> Minibatch-AdaDelta-N_2000-p_0.1.png
+  ▶ Optimizer: Adam
+    ✅ Global Accuracy: 92.44%
+       Class 0 (Majority) Accuracy: 98.16%
+       Class 1 (Minority) Accuracy: 40.98%
+    📉 Final Global Loss: 0.196181
+       Final Class 0 Loss: 0.082677
+       Final Class 1 Loss: 1.193046
+    💾 Plot saved -> Minibatch-Adam-N_2000-p_0.1.png
+
+============================================================
+📊 DATASET: Size (N) = 2000 | Minority Class Ratio (p) = 0.01
+============================================================
+🟢 L-BFGS-B Global Minimum Loss: 0.059929
+
+
+--- Running FullBatch Regime ---
+  ▶ Optimizer: GD_Armijo
+    ✅ Global Accuracy: 98.95%
+       Class 0 (Majority) Accuracy: 99.95%
+       Class 1 (Minority) Accuracy: 0.00%
+    📉 Final Global Loss: 0.060158
+       Final Class 0 Loss: 0.015514
+       Final Class 1 Loss: 3.094436
+    💾 Plot saved -> FullBatch-GD_Armijo-N_2000-p_0.01.png
+  ▶ Optimizer: CG_Armijo
+    ✅ Global Accuracy: 98.95%
+       Class 0 (Majority) Accuracy: 99.95%
+       Class 1 (Minority) Accuracy: 0.00%
+    📉 Final Global Loss: 0.059929
+       Final Class 0 Loss: 0.014022
+       Final Class 1 Loss: 3.180039
+    💾 Plot saved -> FullBatch-CG_Armijo-N_2000-p_0.01.png
+  ▶ Optimizer: Adagrad
+    ✅ Global Accuracy: 93.65%
+       Class 0 (Majority) Accuracy: 94.32%
+       Class 1 (Minority) Accuracy: 27.59%
+    📉 Final Global Loss: 0.298920
+       Final Class 0 Loss: 0.286576
+       Final Class 1 Loss: 1.120107
+    💾 Plot saved -> FullBatch-Adagrad-N_2000-p_0.01.png
+  ▶ Optimizer: RMSProp
+    ✅ Global Accuracy: 98.98%
+       Class 0 (Majority) Accuracy: 99.95%
+       Class 1 (Minority) Accuracy: 3.45%
+    📉 Final Global Loss: 0.067816
+       Final Class 0 Loss: 0.029554
+       Final Class 1 Loss: 2.659486
+    💾 Plot saved -> FullBatch-RMSProp-N_2000-p_0.01.png
+  ▶ Optimizer: AdaDelta
+    ✅ Global Accuracy: 91.69%
+       Class 0 (Majority) Accuracy: 92.34%
+       Class 1 (Minority) Accuracy: 27.59%
+    📉 Final Global Loss: 0.432022
+       Final Class 0 Loss: 0.424840
+       Final Class 1 Loss: 0.875616
+    💾 Plot saved -> FullBatch-AdaDelta-N_2000-p_0.01.png
+  ▶ Optimizer: Adam
+    ✅ Global Accuracy: 93.35%
+       Class 0 (Majority) Accuracy: 94.01%
+       Class 1 (Minority) Accuracy: 27.59%
+    📉 Final Global Loss: 0.320743
+       Final Class 0 Loss: 0.309259
+       Final Class 1 Loss: 1.068083
+    💾 Plot saved -> FullBatch-Adam-N_2000-p_0.01.png
+
+--- Running Minibatch Regime ---
+  ▶ Optimizer: SGD_Polyak
+    ✅ Global Accuracy: 98.50%
+       Class 0 (Majority) Accuracy: 99.39%
+       Class 1 (Minority) Accuracy: 10.34%
+    📉 Final Global Loss: 0.138242
+       Final Class 0 Loss: 0.017705
+       Final Class 1 Loss: 4.840715
+    💾 Plot saved -> Minibatch-SGD_Polyak-N_2000-p_0.01.png
+  ▶ Optimizer: Adagrad
+    ✅ Global Accuracy: 98.33%
+       Class 0 (Majority) Accuracy: 99.19%
+       Class 1 (Minority) Accuracy: 13.79%
+    📉 Final Global Loss: 0.098438
+       Final Class 0 Loss: 0.067002
+       Final Class 1 Loss: 2.256185
+    💾 Plot saved -> Minibatch-Adagrad-N_2000-p_0.01.png
+  ▶ Optimizer: RMSProp
+    ✅ Global Accuracy: 98.98%
+       Class 0 (Majority) Accuracy: 99.95%
+       Class 1 (Minority) Accuracy: 3.45%
+    📉 Final Global Loss: 0.062413
+       Final Class 0 Loss: 0.012399
+       Final Class 1 Loss: 3.330018
+    💾 Plot saved -> Minibatch-RMSProp-N_2000-p_0.01.png
+  ▶ Optimizer: AdaDelta
+    ✅ Global Accuracy: 99.00%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 0.00%
+    📉 Final Global Loss: 0.062246
+       Final Class 0 Loss: 0.016644
+       Final Class 1 Loss: 3.179553
+    💾 Plot saved -> Minibatch-AdaDelta-N_2000-p_0.01.png
+  ▶ Optimizer: Adam
+    ✅ Global Accuracy: 98.95%
+       Class 0 (Majority) Accuracy: 99.95%
+       Class 1 (Minority) Accuracy: 0.00%
+    📉 Final Global Loss: 0.059708
+       Final Class 0 Loss: 0.014261
+       Final Class 1 Loss: 3.165073
+    💾 Plot saved -> Minibatch-Adam-N_2000-p_0.01.png
+
+============================================================
+📊 DATASET: Size (N) = 2000 | Minority Class Ratio (p) = 0.005
+============================================================
+🟢 L-BFGS-B Global Minimum Loss: 0.043821
+
+
+--- Running FullBatch Regime ---
+  ▶ Optimizer: GD_Armijo
+    ✅ Global Accuracy: 99.50%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 0.00%
+    📉 Final Global Loss: 0.044038
+       Final Class 0 Loss: 0.010740
+       Final Class 1 Loss: 3.515801
+    💾 Plot saved -> FullBatch-GD_Armijo-N_2000-p_0.005.png
+  ▶ Optimizer: CG_Armijo
+    ✅ Global Accuracy: 99.50%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 0.00%
+    📉 Final Global Loss: 0.043821
+       Final Class 0 Loss: 0.009345
+       Final Class 1 Loss: 3.638442
+    💾 Plot saved -> FullBatch-CG_Armijo-N_2000-p_0.005.png
+  ▶ Optimizer: Adagrad
+    ✅ Global Accuracy: 94.11%
+       Class 0 (Majority) Accuracy: 94.45%
+       Class 1 (Minority) Accuracy: 26.32%
+    📉 Final Global Loss: 0.293166
+       Final Class 0 Loss: 0.285778
+       Final Class 1 Loss: 1.035667
+    💾 Plot saved -> FullBatch-Adagrad-N_2000-p_0.005.png
+  ▶ Optimizer: RMSProp
+    ✅ Global Accuracy: 99.48%
+       Class 0 (Majority) Accuracy: 99.95%
+       Class 1 (Minority) Accuracy: 5.26%
+    📉 Final Global Loss: 0.053088
+       Final Class 0 Loss: 0.026277
+       Final Class 1 Loss: 2.832752
+    💾 Plot saved -> FullBatch-RMSProp-N_2000-p_0.005.png
+  ▶ Optimizer: AdaDelta
+    ✅ Global Accuracy: 91.65%
+       Class 0 (Majority) Accuracy: 91.97%
+       Class 1 (Minority) Accuracy: 26.32%
+    📉 Final Global Loss: 0.428789
+       Final Class 0 Loss: 0.424180
+       Final Class 1 Loss: 0.840361
+    💾 Plot saved -> FullBatch-AdaDelta-N_2000-p_0.005.png
+  ▶ Optimizer: Adam
+    ✅ Global Accuracy: 93.96%
+       Class 0 (Majority) Accuracy: 94.30%
+       Class 1 (Minority) Accuracy: 26.32%
+    📉 Final Global Loss: 0.315482
+       Final Class 0 Loss: 0.308496
+       Final Class 1 Loss: 0.991920
+    💾 Plot saved -> FullBatch-Adam-N_2000-p_0.005.png
+
+--- Running Minibatch Regime ---
+  ▶ Optimizer: SGD_Polyak
+    ✅ Global Accuracy: 99.50%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 0.00%
+    📉 Final Global Loss: 0.106819
+       Final Class 0 Loss: 0.000768
+       Final Class 1 Loss: 7.026917
+    💾 Plot saved -> Minibatch-SGD_Polyak-N_2000-p_0.005.png
+  ▶ Optimizer: Adagrad
+    ✅ Global Accuracy: 98.88%
+       Class 0 (Majority) Accuracy: 99.29%
+       Class 1 (Minority) Accuracy: 15.79%
+    📉 Final Global Loss: 0.085172
+       Final Class 0 Loss: 0.064415
+       Final Class 1 Loss: 2.246248
+    💾 Plot saved -> Minibatch-Adagrad-N_2000-p_0.005.png
+  ▶ Optimizer: RMSProp
+    ✅ Global Accuracy: 99.50%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 0.00%
+    📉 Final Global Loss: 0.045713
+       Final Class 0 Loss: 0.008079
+       Final Class 1 Loss: 3.819651
+    💾 Plot saved -> Minibatch-RMSProp-N_2000-p_0.005.png
+  ▶ Optimizer: AdaDelta
+    ✅ Global Accuracy: 99.50%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 0.00%
+    📉 Final Global Loss: 0.044426
+       Final Class 0 Loss: 0.010222
+       Final Class 1 Loss: 3.635853
+    💾 Plot saved -> Minibatch-AdaDelta-N_2000-p_0.005.png
+  ▶ Optimizer: Adam
+    ✅ Global Accuracy: 99.50%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 0.00%
+    📉 Final Global Loss: 0.043739
+       Final Class 0 Loss: 0.009406
+       Final Class 1 Loss: 3.632335
+    💾 Plot saved -> Minibatch-Adam-N_2000-p_0.005.png
+
+============================================================
+📊 DATASET: Size (N) = 5000 | Minority Class Ratio (p) = 0.1
+============================================================
+🟢 L-BFGS-B Global Minimum Loss: 0.190289
+
+
+--- Running FullBatch Regime ---
+  ▶ Optimizer: GD_Armijo
+    ✅ Global Accuracy: 94.46%
+       Class 0 (Majority) Accuracy: 98.95%
+       Class 1 (Minority) Accuracy: 54.08%
+    📉 Final Global Loss: 0.190289
+       Final Class 0 Loss: 0.066822
+       Final Class 1 Loss: 1.238239
+    💾 Plot saved -> FullBatch-GD_Armijo-N_5000-p_0.1.png
+  ▶ Optimizer: CG_Armijo
+    ✅ Global Accuracy: 94.46%
+       Class 0 (Majority) Accuracy: 98.95%
+       Class 1 (Minority) Accuracy: 54.08%
+    📉 Final Global Loss: 0.190289
+       Final Class 0 Loss: 0.066778
+       Final Class 1 Loss: 1.238609
+    💾 Plot saved -> FullBatch-CG_Armijo-N_5000-p_0.1.png
+  ▶ Optimizer: Adagrad
+    ✅ Global Accuracy: 90.50%
+       Class 0 (Majority) Accuracy: 93.85%
+       Class 1 (Minority) Accuracy: 60.34%
+    📉 Final Global Loss: 0.306200
+       Final Class 0 Loss: 0.249176
+       Final Class 1 Loss: 0.788665
+    💾 Plot saved -> FullBatch-Adagrad-N_5000-p_0.1.png
+  ▶ Optimizer: RMSProp
+    ✅ Global Accuracy: 94.35%
+       Class 0 (Majority) Accuracy: 98.93%
+       Class 1 (Minority) Accuracy: 53.13%
+    📉 Final Global Loss: 0.190459
+       Final Class 0 Loss: 0.067649
+       Final Class 1 Loss: 1.232814
+    💾 Plot saved -> FullBatch-RMSProp-N_5000-p_0.1.png
+  ▶ Optimizer: AdaDelta
+    ✅ Global Accuracy: 89.39%
+       Class 0 (Majority) Accuracy: 92.94%
+       Class 1 (Minority) Accuracy: 57.50%
+    📉 Final Global Loss: 0.406857
+       Final Class 0 Loss: 0.370153
+       Final Class 1 Loss: 0.712979
+    💾 Plot saved -> FullBatch-AdaDelta-N_5000-p_0.1.png
+  ▶ Optimizer: Adam
+    ✅ Global Accuracy: 90.32%
+       Class 0 (Majority) Accuracy: 93.74%
+       Class 1 (Minority) Accuracy: 59.58%
+    📉 Final Global Loss: 0.321679
+       Final Class 0 Loss: 0.268179
+       Final Class 1 Loss: 0.772778
+    💾 Plot saved -> FullBatch-Adam-N_5000-p_0.1.png
+
+--- Running Minibatch Regime ---
+  ▶ Optimizer: SGD_Polyak
+    ✅ Global Accuracy: 92.95%
+       Class 0 (Majority) Accuracy: 97.12%
+       Class 1 (Minority) Accuracy: 55.41%
+    📉 Final Global Loss: 0.311658
+       Final Class 0 Loss: 0.088027
+       Final Class 1 Loss: 1.954791
+    💾 Plot saved -> Minibatch-SGD_Polyak-N_5000-p_0.1.png
+  ▶ Optimizer: Adagrad
+    ✅ Global Accuracy: 94.51%
+       Class 0 (Majority) Accuracy: 98.82%
+       Class 1 (Minority) Accuracy: 55.79%
+    📉 Final Global Loss: 0.193095
+       Final Class 0 Loss: 0.079951
+       Final Class 1 Loss: 1.157963
+    💾 Plot saved -> Minibatch-Adagrad-N_5000-p_0.1.png
+  ▶ Optimizer: RMSProp
+    ✅ Global Accuracy: 94.39%
+       Class 0 (Majority) Accuracy: 98.68%
+       Class 1 (Minority) Accuracy: 55.79%
+    📉 Final Global Loss: 0.194668
+       Final Class 0 Loss: 0.064959
+       Final Class 1 Loss: 1.272097
+    💾 Plot saved -> Minibatch-RMSProp-N_5000-p_0.1.png
+  ▶ Optimizer: AdaDelta
+    ✅ Global Accuracy: 94.46%
+       Class 0 (Majority) Accuracy: 98.95%
+       Class 1 (Minority) Accuracy: 54.08%
+    📉 Final Global Loss: 0.192660
+       Final Class 0 Loss: 0.066088
+       Final Class 1 Loss: 1.244745
+    💾 Plot saved -> Minibatch-AdaDelta-N_5000-p_0.1.png
+  ▶ Optimizer: Adam
+    ✅ Global Accuracy: 94.46%
+       Class 0 (Majority) Accuracy: 98.97%
+       Class 1 (Minority) Accuracy: 53.89%
+    📉 Final Global Loss: 0.190031
+       Final Class 0 Loss: 0.066701
+       Final Class 1 Loss: 1.239312
+    💾 Plot saved -> Minibatch-Adam-N_5000-p_0.1.png
+
+============================================================
+📊 DATASET: Size (N) = 5000 | Minority Class Ratio (p) = 0.01
+============================================================
+🟢 L-BFGS-B Global Minimum Loss: 0.062595
+
+
+--- Running FullBatch Regime ---
+  ▶ Optimizer: GD_Armijo
+    ✅ Global Accuracy: 99.10%
+       Class 0 (Majority) Accuracy: 99.98%
+       Class 1 (Minority) Accuracy: 12.50%
+    📉 Final Global Loss: 0.063000
+       Final Class 0 Loss: 0.015691
+       Final Class 1 Loss: 2.972523
+    💾 Plot saved -> FullBatch-GD_Armijo-N_5000-p_0.01.png
+  ▶ Optimizer: CG_Armijo
+    ✅ Global Accuracy: 99.12%
+       Class 0 (Majority) Accuracy: 99.98%
+       Class 1 (Minority) Accuracy: 13.75%
+    📉 Final Global Loss: 0.062595
+       Final Class 0 Loss: 0.013748
+       Final Class 1 Loss: 3.066706
+    💾 Plot saved -> FullBatch-CG_Armijo-N_5000-p_0.01.png
+  ▶ Optimizer: Adagrad
+    ✅ Global Accuracy: 94.89%
+       Class 0 (Majority) Accuracy: 95.51%
+       Class 1 (Minority) Accuracy: 33.75%
+    📉 Final Global Loss: 0.243111
+       Final Class 0 Loss: 0.222956
+       Final Class 1 Loss: 1.469760
+    💾 Plot saved -> FullBatch-Adagrad-N_5000-p_0.01.png
+  ▶ Optimizer: RMSProp
+    ✅ Global Accuracy: 99.08%
+       Class 0 (Majority) Accuracy: 99.96%
+       Class 1 (Minority) Accuracy: 12.50%
+    📉 Final Global Loss: 0.069247
+       Final Class 0 Loss: 0.026506
+       Final Class 1 Loss: 2.690819
+    💾 Plot saved -> FullBatch-RMSProp-N_5000-p_0.01.png
+  ▶ Optimizer: AdaDelta
+    ✅ Global Accuracy: 93.91%
+       Class 0 (Majority) Accuracy: 94.53%
+       Class 1 (Minority) Accuracy: 32.50%
+    📉 Final Global Loss: 0.368387
+       Final Class 0 Loss: 0.357032
+       Final Class 1 Loss: 1.023843
+    💾 Plot saved -> FullBatch-AdaDelta-N_5000-p_0.01.png
+  ▶ Optimizer: Adam
+    ✅ Global Accuracy: 94.81%
+       Class 0 (Majority) Accuracy: 95.43%
+       Class 1 (Minority) Accuracy: 33.75%
+    📉 Final Global Loss: 0.262649
+       Final Class 0 Loss: 0.244280
+       Final Class 1 Loss: 1.367537
+    💾 Plot saved -> FullBatch-Adam-N_5000-p_0.01.png
+
+--- Running Minibatch Regime ---
+  ▶ Optimizer: SGD_Polyak
+    ✅ Global Accuracy: 98.82%
+       Class 0 (Majority) Accuracy: 99.80%
+       Class 1 (Minority) Accuracy: 2.50%
+    📉 Final Global Loss: 0.138518
+       Final Class 0 Loss: 0.011751
+       Final Class 1 Loss: 5.267383
+    💾 Plot saved -> Minibatch-SGD_Polyak-N_5000-p_0.01.png
+  ▶ Optimizer: Adagrad
+    ✅ Global Accuracy: 99.06%
+       Class 0 (Majority) Accuracy: 99.86%
+       Class 1 (Minority) Accuracy: 20.00%
+    📉 Final Global Loss: 0.077797
+       Final Class 0 Loss: 0.033706
+       Final Class 1 Loss: 2.800294
+    💾 Plot saved -> Minibatch-Adagrad-N_5000-p_0.01.png
+  ▶ Optimizer: RMSProp
+    ✅ Global Accuracy: 99.12%
+       Class 0 (Majority) Accuracy: 99.96%
+       Class 1 (Minority) Accuracy: 16.25%
+    📉 Final Global Loss: 0.064534
+       Final Class 0 Loss: 0.015012
+       Final Class 1 Loss: 3.055896
+    💾 Plot saved -> Minibatch-RMSProp-N_5000-p_0.01.png
+  ▶ Optimizer: AdaDelta
+    ✅ Global Accuracy: 99.09%
+       Class 0 (Majority) Accuracy: 99.98%
+       Class 1 (Minority) Accuracy: 11.25%
+    📉 Final Global Loss: 0.062837
+       Final Class 0 Loss: 0.013632
+       Final Class 1 Loss: 3.100545
+    💾 Plot saved -> Minibatch-AdaDelta-N_5000-p_0.01.png
+  ▶ Optimizer: Adam
+    ✅ Global Accuracy: 99.12%
+       Class 0 (Majority) Accuracy: 99.98%
+       Class 1 (Minority) Accuracy: 13.75%
+    📉 Final Global Loss: 0.062646
+       Final Class 0 Loss: 0.013643
+       Final Class 1 Loss: 3.073509
+    💾 Plot saved -> Minibatch-Adam-N_5000-p_0.01.png
+
+============================================================
+📊 DATASET: Size (N) = 5000 | Minority Class Ratio (p) = 0.005
+============================================================
+🟢 L-BFGS-B Global Minimum Loss: 0.049228
+
+
+--- Running FullBatch Regime ---
+  ▶ Optimizer: GD_Armijo
+    ✅ Global Accuracy: 99.52%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 3.64%
+    📉 Final Global Loss: 0.049968
+       Final Class 0 Loss: 0.012237
+       Final Class 1 Loss: 3.442341
+    💾 Plot saved -> FullBatch-GD_Armijo-N_5000-p_0.005.png
+  ▶ Optimizer: CG_Armijo
+    ✅ Global Accuracy: 99.55%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 9.09%
+    📉 Final Global Loss: 0.049228
+       Final Class 0 Loss: 0.009840
+       Final Class 1 Loss: 3.590616
+    💾 Plot saved -> FullBatch-CG_Armijo-N_5000-p_0.005.png
+  ▶ Optimizer: Adagrad
+    ✅ Global Accuracy: 95.16%
+       Class 0 (Majority) Accuracy: 95.49%
+       Class 1 (Minority) Accuracy: 29.09%
+    📉 Final Global Loss: 0.236833
+       Final Class 0 Loss: 0.221817
+       Final Class 1 Loss: 1.567614
+    💾 Plot saved -> FullBatch-Adagrad-N_5000-p_0.005.png
+  ▶ Optimizer: RMSProp
+    ✅ Global Accuracy: 99.53%
+       Class 0 (Majority) Accuracy: 99.98%
+       Class 1 (Minority) Accuracy: 9.09%
+    📉 Final Global Loss: 0.057882
+       Final Class 0 Loss: 0.023704
+       Final Class 1 Loss: 3.119794
+    💾 Plot saved -> FullBatch-RMSProp-N_5000-p_0.005.png
+  ▶ Optimizer: AdaDelta
+    ✅ Global Accuracy: 94.25%
+       Class 0 (Majority) Accuracy: 94.58%
+       Class 1 (Minority) Accuracy: 29.09%
+    📉 Final Global Loss: 0.365076
+       Final Class 0 Loss: 0.356525
+       Final Class 1 Loss: 1.070444
+    💾 Plot saved -> FullBatch-AdaDelta-N_5000-p_0.005.png
+  ▶ Optimizer: Adam
+    ✅ Global Accuracy: 95.06%
+       Class 0 (Majority) Accuracy: 95.39%
+       Class 1 (Minority) Accuracy: 29.09%
+    📉 Final Global Loss: 0.256967
+       Final Class 0 Loss: 0.243262
+       Final Class 1 Loss: 1.452131
+    💾 Plot saved -> FullBatch-Adam-N_5000-p_0.005.png
+
+--- Running Minibatch Regime ---
+  ▶ Optimizer: SGD_Polyak
+    ✅ Global Accuracy: 96.60%
+       Class 0 (Majority) Accuracy: 97.07%
+       Class 1 (Minority) Accuracy: 3.64%
+    📉 Final Global Loss: 0.096818
+       Final Class 0 Loss: 0.074436
+       Final Class 1 Loss: 5.206093
+    💾 Plot saved -> Minibatch-SGD_Polyak-N_5000-p_0.005.png
+  ▶ Optimizer: Adagrad
+    ✅ Global Accuracy: 99.43%
+       Class 0 (Majority) Accuracy: 99.86%
+       Class 1 (Minority) Accuracy: 14.55%
+    📉 Final Global Loss: 0.066038
+       Final Class 0 Loss: 0.031018
+       Final Class 1 Loss: 3.229504
+    💾 Plot saved -> Minibatch-Adagrad-N_5000-p_0.005.png
+  ▶ Optimizer: RMSProp
+    ✅ Global Accuracy: 99.55%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 10.91%
+    📉 Final Global Loss: 0.051152
+       Final Class 0 Loss: 0.008442
+       Final Class 1 Loss: 3.741782
+    💾 Plot saved -> Minibatch-RMSProp-N_5000-p_0.005.png
+  ▶ Optimizer: AdaDelta
+    ✅ Global Accuracy: 99.52%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 3.64%
+    📉 Final Global Loss: 0.049488
+       Final Class 0 Loss: 0.009575
+       Final Class 1 Loss: 3.650577
+    💾 Plot saved -> Minibatch-AdaDelta-N_5000-p_0.005.png
+  ▶ Optimizer: Adam
+    ✅ Global Accuracy: 99.55%
+       Class 0 (Majority) Accuracy: 100.00%
+       Class 1 (Minority) Accuracy: 9.09%
+    📉 Final Global Loss: 0.049284
+       Final Class 0 Loss: 0.009748
+       Final Class 1 Loss: 3.599306
+    💾 Plot saved -> Minibatch-Adam-N_5000-p_0.005.png
+
+============================================================
+✅ All experiments completed successfully! Check the 'results' folder.
+============================================================
