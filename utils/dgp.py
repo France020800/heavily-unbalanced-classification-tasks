@@ -1,7 +1,7 @@
 from sklearn.datasets import make_classification
 import numpy as np
 
-def generate_experiment_datasets():
+def generate_experiment_datasets(n_features=16):
     """
     Generates a dictionary of binary classification datasets based on the assignment rules.
     Returns:
@@ -10,7 +10,6 @@ def generate_experiment_datasets():
     # Parameters from the assignment
     N_values = [500, 2000, 5000]
     p_values = [0.1, 0.01, 0.005]
-    n_features = 16
 
     datasets = {}
 

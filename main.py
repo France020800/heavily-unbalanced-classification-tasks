@@ -145,7 +145,7 @@ def main():
 
     print("\nGenerating datasets...")
     datasets_dict = generate_experiment_datasets()
-    epochs = 300
+    epochs = 1000
 
     for (N, p), (X, y) in datasets_dict.items():
         print(f"\n{'=' * 60}")
@@ -214,9 +214,6 @@ def single_run():
     results_dir = "results"
     os.makedirs(results_dir, exist_ok=True)
 
-    log_path = os.path.join(results_dir, "single_experiment_log.txt")
-    sys.stdout = DualLogger(log_path)
-
     print("=" * 60)
     print("🚀 Starting Single Optimization Experiment")
     print(f"Timestamp: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
@@ -224,9 +221,12 @@ def single_run():
 
     N = 5000
     p = 0.01
-    epochs = 1000
-    opt_name = 'Adam'
-    regime_name = 'FullBatch'
+    epochs = 10000
+    opt_name = 'SGD_Polyak'
+    regime_name = 'Minibatch'
+
+    log_path = os.path.join(results_dir, f"{regime_name}-{opt_name}-N_{N}-p_{p}-e_{epochs}.txt")
+    sys.stdout = DualLogger(log_path)
 
     print("\nGenerating datasets...")
     datasets_dict = generate_experiment_datasets()
@@ -249,7 +249,7 @@ def single_run():
     try:
         res_dict = {}
         res_dict[opt_name] = run_single_experiment(
-            model, Optimizers.adam, w0, is_minibatch=False, epochs=epochs
+            model, Optimizers.sgd_polyak, w0, is_minibatch=False, epochs=epochs
         )
 
         res = res_dict[opt_name]
@@ -285,4 +285,5 @@ def single_run():
 
 
 if __name__ == "__main__":
-    main()
+    #main()
+    single_run()
