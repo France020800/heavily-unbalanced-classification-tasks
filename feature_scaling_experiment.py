@@ -31,7 +31,7 @@ if __name__ == "__main__":
     for n_features in feature_counts:
         print(f"\nGenerating Dataset with {n_features} features...")
 
-        n_inf = int(n_features * 0.65)  # 80% of features are informative, rest are redundant (noise)
+        n_inf = int(n_features * 0.8)  # 80% of features are informative, rest are redundant (noise)
         X, y = make_classification(
             n_samples=N,
             n_features=n_features,
