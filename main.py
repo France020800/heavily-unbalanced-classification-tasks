@@ -144,7 +144,7 @@ def main():
     }
 
     print("\nGenerating datasets...")
-    datasets_dict = generate_experiment_datasets()
+    datasets_dict = generate_experiment_datasets(n_features=16)
     epochs = 1000
 
     for (N, p), (X, y) in datasets_dict.items():
@@ -177,12 +177,25 @@ def main():
                     final_loss_c0 = res['loss_c0'][-1]
                     final_loss_c1 = res['loss_c1'][-1]
 
+                    acc_c0 = res['acc_c0']
+                    acc_c1 = res['acc_c1']
+
                     # Calculate true global accuracy weighted by probability (p)
-                    global_acc = res['acc_c0'] * (1 - p) + res['acc_c1'] * p
+                    global_acc = acc_c0 * (1 - p) + acc_c1 * p
+
+                    # --- F1-Score C1 ---
+                    TP = p * acc_c1
+                    FP = (1 - p) * (1 - acc_c0)
+
+                    precision = (TP / (TP + FP)) if (TP + FP) > 0 else 0.0
+                    recall = acc_c1
+
+                    f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0.0
 
                     print(f"    ✅ Global Accuracy: {global_acc * 100:.2f}%")
-                    print(f"       Class 0 (Majority) Accuracy: {res['acc_c0'] * 100:.2f}%")
-                    print(f"       Class 1 (Minority) Accuracy: {res['acc_c1'] * 100:.2f}%")
+                    print(f"       Class 0 (Majority) Acc: {acc_c0 * 100:.2f}%")
+                    print(f"       Class 1 (Minority) Acc (Recall): {recall * 100:.2f}%")
+                    print(f"    ⭐ F1-Score (Minority): {f1_score:.4f} (Precision: {precision:.4f})")
                     print(f"    📉 Final Global Loss: {final_global_loss:.6f}")
                     print(f"       Final Class 0 Loss: {final_loss_c0:.6f}")
                     print(f"       Final Class 1 Loss: {final_loss_c1:.6f}")
@@ -221,7 +234,7 @@ def single_run():
 
     N = 5000
     p = 0.01
-    epochs = 10000
+    epochs = 1000
     opt_name = 'SGD_Polyak'
     regime_name = 'Minibatch'
 
@@ -254,20 +267,33 @@ def single_run():
 
         res = res_dict[opt_name]
 
+        # Extract final losses
         final_global_loss = res['full_losses'][-1]
         final_loss_c0 = res['loss_c0'][-1]
         final_loss_c1 = res['loss_c1'][-1]
 
-        global_acc = res['acc_c0'] * (1 - p) + res['acc_c1'] * p
+        acc_c0 = res['acc_c0']
+        acc_c1 = res['acc_c1']
 
-        # Print metrics
+        # Calculate true global accuracy weighted by probability (p)
+        global_acc = acc_c0 * (1 - p) + acc_c1 * p
+
+        # --- F1-Score C1 ---
+        TP = p * acc_c1
+        FP = (1 - p) * (1 - acc_c0)
+
+        precision = (TP / (TP + FP)) if (TP + FP) > 0 else 0.0
+        recall = acc_c1
+
+        f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0.0
+
         print(f"    ✅ Global Accuracy: {global_acc * 100:.2f}%")
-        print(f"       Class 0 (Majority) Accuracy: {res['acc_c0'] * 100:.2f}%")
-        print(f"       Class 1 (Minority) Accuracy: {res['acc_c1'] * 100:.2f}%")
+        print(f"       Class 0 (Majority) Acc: {acc_c0 * 100:.2f}%")
+        print(f"       Class 1 (Minority) Acc (Recall): {recall * 100:.2f}%")
+        print(f"    ⭐ F1-Score (Minority): {f1_score:.4f} (Precision: {precision:.4f})")
         print(f"    📉 Final Global Loss: {final_global_loss:.6f}")
         print(f"       Final Class 0 Loss: {final_loss_c0:.6f}")
         print(f"       Final Class 1 Loss: {final_loss_c1:.6f}")
-
         filename = f"SingleExp - {regime_name} - {opt_name} - N_{N} - p_{p} - {epochs}ep.png"
         save_path = os.path.join(results_dir, filename)
         title = f"{regime_name} | {opt_name} | N={N}, p={p} | Epochs={epochs}"
@@ -285,5 +311,5 @@ def single_run():
 
 
 if __name__ == "__main__":
-    #main()
-    single_run()
+    main()
+    #single_run()
